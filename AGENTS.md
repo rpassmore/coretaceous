@@ -1,4 +1,4 @@
-# Copilot Instructions for finpilot bootc Image Template
+# Copilot Instructions for coretaceous bootc Image Template
 
 ## CRITICAL: GitHub API Usage
 
@@ -33,7 +33,7 @@
 
 ### 1. Rename ALL instances of `finpilot`
 
-**Source of truth**: `Containerfile` line 9: `# Name: finpilot`
+**Source of truth**: `Containerfile` line 9: `# Name: coretaceous`
 
 **Files to update:**
 - `Containerfile` (line 9)
@@ -1104,5 +1104,5 @@ Assisted-by: Claude 3.5 Sonnet via GitHub Copilot
 ---
 
 **Last Updated**: 2025-11-14  
-**Template Version**: finpilot (Enhanced with comprehensive Copilot instructions)  
+**Template Version**: coretaceous (Enhanced with comprehensive Copilot instructions)  
 **Maintainer**: Universal Blue Community
