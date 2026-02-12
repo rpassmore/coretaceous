@@ -1,0 +1,1 @@
+brew "jandedobbeleer/oh-my-posh/oh-my-posh"
