@@ -3,30 +3,25 @@
 # Format: INI file with [Flatpak Preinstall NAME] groups
 # See: https://docs.flatpak.org/en/latest/flatpak-command-reference.html#flatpak-preinstall
 
-# Web Browsers
-[Flatpak Preinstall org.mozilla.firefox]
+# Gaming
+[Flatpak Preinstall om.valvesoftware.Steam]
 Branch=stable
 
-[Flatpak Preinstall org.mozilla.Thunderbird]
+[Flatpak Preinstall com.heroicgameslauncher.hgl]
+Branch=stable
+
+[Flatpak Preinstall com.valvesoftware.Steam.CompatibilityTool.Proton-GE]
+Branch=stable
+
+# Web Browsers
+[Flatpak Preinstall com.google.Chrome]
+Branch=stable
+
+[Flatpak Preinstall com.microsoft.Edge]
 Branch=stable
 
 # GNOME Core Applications
 [Flatpak Preinstall org.gnome.Calculator]
-Branch=stable
-
-[Flatpak Preinstall org.gnome.Calendar]
-Branch=stable
-
-[Flatpak Preinstall org.gnome.Characters]
-Branch=stable
-
-[Flatpak Preinstall org.gnome.Connections]
-Branch=stable
-
-[Flatpak Preinstall org.gnome.Contacts]
-Branch=stable
-
-[Flatpak Preinstall org.gnome.DejaDup]
 Branch=stable
 
 [Flatpak Preinstall org.gnome.FileRoller]
@@ -41,9 +36,6 @@ Branch=stable
 [Flatpak Preinstall org.gnome.Loupe]
 Branch=stable
 
-[Flatpak Preinstall org.gnome.Maps]
-Branch=stable
-
 [Flatpak Preinstall org.gnome.NautilusPreviewer]
 Branch=stable
 
@@ -56,23 +48,51 @@ Branch=stable
 [Flatpak Preinstall org.gnome.TextEditor]
 Branch=stable
 
-[Flatpak Preinstall org.gnome.Weather]
+[Flatpak Preinstall org.gnome.DejaDup]
 Branch=stable
 
 [Flatpak Preinstall org.gnome.baobab]
 Branch=stable
 
-[Flatpak Preinstall org.gnome.clocks]
-Branch=stable
-
 [Flatpak Preinstall org.gnome.font-viewer]
 Branch=stable
 
-# Graphics & Media
-[Flatpak Preinstall com.github.PintaProject.Pinta]
+[Flatpak Preinstall com.github.johnfactotum.Foliate]
 Branch=stable
 
-[Flatpak Preinstall com.github.rafostar.Clapper]
+# Graphics & Media
+[Flatpak Preinstall org.videolan.VLC]
+Branch=stable
+
+[Flatpak Preinstall org.gnome.Showtime]
+Branch=stable
+
+[Flatpak Preinstall com.github.unrud.VideoDownloader]
+Branch=stable
+
+[Flatpak Preinstall com.stremio.Stremio]
+Branch=stable
+
+[Flatpak Preinstall fr.handbrake.ghb]
+Branch=stable
+
+[Flatpak Preinstall org.gimp.GIMP]
+Branch=stable
+
+[Flatpak Preinstall org.darktable.Darktable]
+Branch=stable
+
+[Flatpak Preinstall com.spotify.Client]
+Branch=stable
+
+# Comms
+[Flatpak Preinstall com.discordapp.Discord]
+Branch=stable
+
+[Flatpak Preinstall com.slack.Slack]
+Branch=stable
+
+[Flatpak Preinstall com.transmissionbt.Transmission]
 Branch=stable
 
 # System Utilities
@@ -92,6 +112,18 @@ Branch=stable
 Branch=stable
 
 [Flatpak Preinstall io.gitlab.adhami3310.Impression]
+Branch=stable
+
+[Flatpak Preinstall de.leopoldluley.Clapgrep]
+Branch=stable
+
+[Flatpak Preinstall io.podman_desktop.PodmanDesktop]
+Branch=stable
+
+[Flatpak Preinstall io.github.shiftey.Desktop]
+Branch=stable
+
+[Flatpak Preinstall io.kinvolk.Headlamp]
 Branch=stable
 
 # Universal Blue Specific
