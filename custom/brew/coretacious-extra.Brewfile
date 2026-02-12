@@ -1,1 +1,2 @@
-brew "jandedobbeleer/oh-my-posh/oh-my-posh"
+brew tap jandedobbeleer/oh-my-posh
+brew "oh-my-posh"
