@@ -41,11 +41,11 @@ COPY build /build
 COPY custom /custom
 # Copy from OCI containers to distinct subdirectories to avoid conflicts
 # Note: Renovate can automatically update these :latest tags to SHA-256 digests for reproducibility
-COPY --from=ghcr.io/projectbluefin/common:latest /system_files /oci/common
+#COPY --from=ghcr.io/projectbluefin/common:latest /system_files /oci/common
 
 # Remove Bluefin branding and artwork
-RUN rm -rf /oci/branding /oci/artwork
-#COPY --from=ghcr.io/projectbluefin/common:latest /system_files/shared/usr/share/ublue-os /oci/common/usr/share/ublue-os
+#RUN rm -rf /oci/branding /oci/artwork
+COPY --from=ghcr.io/projectbluefin/common:latest /system_files/shared /oci/common/shared
 
 COPY --from=ghcr.io/ublue-os/brew:latest /system_files /oci/brew
 
