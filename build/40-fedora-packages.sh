@@ -7,13 +7,6 @@ set -oue pipefail
 # shellcheck source=/dev/null
 source /ctx/build/copr-helpers.sh
 
-# Setup repos for packages from Bluefin DX that we want
-#dnf5 -y copr enable ganto/umoci
-#dnf5 -y copr enable ublue-os/staging
-#dnf5 -y copr enable ublue-os/packages
-#dnf5 -y copr enable karmab/kcli
-#dnf5 -y copr enable hikariknight/looking-glass-kvmfr
-
 # this installs a package from fedora repos
 dnf5 -y install \
     bash-color-prompt \
@@ -32,7 +25,6 @@ dnf5 -y install \
     oddjob-mkhomedir \
     openssh-askpass \
     powertop \
-    uupd \
     google-noto-fonts-all \
     restic \
     switcheroo-control \
@@ -42,6 +34,7 @@ dnf5 -y install \
 
 copr_install_isolated "atim/starship" starship
 copr_install_isolated "che/nerd-fonts" nerd-fonts
+copr_install_isolated "ublue-os/packages" uupd
 
 # Add packages from that are included in the bluefin dx version
 dnf5 -y install \
