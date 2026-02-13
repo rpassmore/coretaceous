@@ -107,8 +107,8 @@ dnf5 remove -y \
 # Install macadam it is needed by the podman-desktop-bootc extension, but is not packaged by fedora yet.
 # Ensure /var/usr/local exists (needed because /usr/local is a symlink to it)
 mkdir -p /var/usr/local/bin
-curl -L -o /usr/local/bin/macadam https://github.com/crc-org/macadam/releases/download/v0.2.0/macadam-linux-amd64
-chmod +x /usr/local/bin/macadam
+curl -L -o /var/usr/local/bin/macadam https://github.com/crc-org/macadam/releases/download/v0.2.0/macadam-linux-amd64
+chmod +x /var/usr/local/bin/macadam
 
 # Install dynamic wallpapers
 curl -s "https://raw.githubusercontent.com/rpassmore/Linux_Dynamic_Wallpapers/main/Easy_Install.sh" | bash
