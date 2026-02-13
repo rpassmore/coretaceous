@@ -43,11 +43,75 @@ echo "::endgroup::"
 
 echo "::group:: Install Packages"
 
-# Install packages using dnf5
-# Example: dnf5 install -y tmux
+# Install packages using dnf5 from fedora repos
+dnf5 -y install \
+    bash-color-prompt \
+    bootc \
+    fastfetch \
+    firewall-config \
+    genisoimage \
+    git-credential-libsecret \
+    git \
+    gnome-shell-extension-dash-to-dock \
+    gnome-shell-extension-appindicator \
+    gnome-shell-extension-caffeine \
+    gnome-shell-extension-search-light \
+    gnome-shell-extension-blur-my-shell \
+    gnome-backgrounds-extras \
+    gnome-tweaks \
+    google-droid-sans-mono-fonts \
+    google-go-mono-fonts \
+    hplip \
+    ibm-plex-mono-fonts \
+    iotop \
+    lm_sensors \
+    oddjob-mkhomedir \
+    openssh-askpass \
+    p7zip \
+    p7zip-plugins \
+    powertop \
+    powerline-fonts \
+    google-noto-fonts-all \
+    restic \
+    tiptop \
+    switcheroo-control \
+    sysprof \
+    waypipe \
+    wireguard-tools \
+    zsh
 
-# Example using COPR with isolated pattern:
-# copr_install_isolated "ublue-os/staging" package-name
+copr_install_isolated "atim/starship" starship
+copr_install_isolated "che/nerd-fonts" nerd-fonts
+copr_install_isolated "ublue-os/packages" uupd
+copr_install_isolated "atim/ubuntu-fonts" ubuntu-family-fonts
+
+# Install tooling needed to develop bootc containers locally
+copr_install_isolated "gmaglione/podman-bootc" podman-bootc
+dnf5 -y install \
+    osbuild-selinux \
+    podman-compose \
+    podmansh \
+    gvisor-tap-vsock
+
+
+# Remove packages
+dnf5 remove -y \
+    firefox \
+    firefox-langpacks \
+    gnome-software \
+    gnome-extensions-app \
+    gnome-shell-extension-background-logo \
+    gnome-software-rpm-ostree \
+    gnome-terminal-nautilus \
+    yubikey-manager
+
+# Install macadam it is needed by the podman-desktop-bootc extension, but is not packaged by fedora yet.
+mkdir -p /usr/local/bin
+curl -L -o /usr/local/bin/macadam https://github.com/crc-org/macadam/releases/download/v0.2.0/macadam-linux-amd64
+chmod +x /usr/local/bin/macadam
+
+# Install dynamic wallpapers
+curl -s "https://raw.githubusercontent.com/rpassmore/Linux_Dynamic_Wallpapers/main/Easy_Install.sh" | bash
 
 echo "::endgroup::"
 
