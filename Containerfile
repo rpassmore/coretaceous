@@ -48,7 +48,7 @@ COPY custom /custom
 COPY --from=ghcr.io/projectbluefin/common:latest /system_files/shared /oci/common/shared
 COPY --from=ghcr.io/projectbluefin/common:latest /system_files/bluefin/usr/share/ublue-os/just /oci/common/bluefin/usr/share/ublue-os/just
 
-COPY --from=ghcr.io/ublue-os/brew:latest /system_files /
+COPY --from=ghcr.io/ublue-os/brew:latest /system_files /oci/brew
 
 # Base Image - GNOME included
 FROM ghcr.io/ublue-os/silverblue-main:43
