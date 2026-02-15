@@ -78,10 +78,7 @@ FROM ghcr.io/ublue-os/silverblue-main:43
 RUN --mount=type=bind,from=ctx,source=/,target=/ctx \
     --mount=type=cache,dst=/var/cache \
     --mount=type=cache,dst=/var/log \
-    --mount=type=tmpfs,dst=/tmp && \
-    /usr/bin/systemctl preset brew-setup.service && \
-    /usr/bin/systemctl preset brew-update.timer && \
-    /usr/bin/systemctl preset brew-upgrade.timer && \
+    --mount=type=tmpfs,dst=/tmp \
     /ctx/build/10-build.sh
     
 ### LINTING
