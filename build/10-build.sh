@@ -120,9 +120,9 @@ echo "::group:: System Configuration"
 # Enable/disable systemd services
 systemctl enable podman.socket
 # Example: systemctl mask unwanted-service
-systemctl preset brew-setup.service
-systemctl preset brew-update.timer
-systemctl preset brew-upgrade.timer
+#systemctl preset brew-setup.service
+#systemctl preset brew-update.timer
+#systemctl preset brew-upgrade.timer
 
 echo "::endgroup::"
 
