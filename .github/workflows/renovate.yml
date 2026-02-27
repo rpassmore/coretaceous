@@ -1,4 +1,9 @@
 name: Renovate
+permissions:
+  contents: write
+  pull-requests: write
+  issues: write
+  workflows: write
 on:
   schedule:
     # Run every 6 hours
