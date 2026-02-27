@@ -45,13 +45,13 @@ COPY custom /custom
 
 # Remove Bluefin branding and artwork
 #RUN rm -rf /oci/branding /oci/artwork
-COPY --from=ghcr.io/projectbluefin/common:latest /system_files/shared /oci/common/shared
-COPY --from=ghcr.io/projectbluefin/common:latest /system_files/bluefin/usr/share/ublue-os/just /oci/common/bluefin/usr/share/ublue-os/just
+COPY --from=ghcr.io/projectbluefin/common:latest@sha256:b8fe93b16674a547b4cf38493af19caa484d9575956fc3be04ca3d10faec23ff /system_files/shared /oci/common/shared
+COPY --from=ghcr.io/projectbluefin/common:latest@sha256:b8fe93b16674a547b4cf38493af19caa484d9575956fc3be04ca3d10faec23ff /system_files/bluefin/usr/share/ublue-os/just /oci/common/bluefin/usr/share/ublue-os/just
 
-COPY --from=ghcr.io/ublue-os/brew:latest /system_files /oci/brew
+COPY --from=ghcr.io/ublue-os/brew:latest@sha256:3efdc1a5844a7db38bb241419fef190e026fb245e9c6f6915e626276cebe5770 /system_files /oci/brew
 
 # Base Image - GNOME included
-FROM ghcr.io/ublue-os/silverblue-main:43
+FROM ghcr.io/ublue-os/silverblue-main:43@sha256:34ce9e61e22ac189ad60008e4e5fd5004a25157d509279d73c090e819d03e1cd
 
 ### /opt
 ## Some bootable images, like Fedora, have /opt symlinked to /var/opt, in order to
