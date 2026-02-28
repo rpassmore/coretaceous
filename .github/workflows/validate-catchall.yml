@@ -1,0 +1,21 @@
+name: Catch-all Validate
+permissions:
+  contents: read
+
+on:
+  pull_request:
+    paths-ignore:
+      - "build/**/*.sh"
+      - "custom/flatpak/**"
+      - "custom/brew/**"
+      - "custom/ujust/**"
+      - "Justfile"
+      - ".github/renovate.json5"
+      - ".github/workflows/renovate.yml"
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Skip validation
+        run: echo "No specific validation required for these changed files."
