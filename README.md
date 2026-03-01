@@ -1,5 +1,33 @@
 # coretaceous
 
+## What Makes this Raptor Different?
+
+Here are the changes from `ghcr.io/ublue-os/silverblue-main:43`. This image is based on Fedora Silverblue and includes these customizations:
+
+### Added Packages (Build-time)
+- **System tools & utilities**: bootc, fastfetch, git, restic, zsh, sysprof - [Enhanced CLI experience, backup, and profiling tools]
+- **GNOME enhancements**: gnome-tweaks, dash-to-dock, blur-my-shell, caffeine - [Customized and polished desktop experience]
+- **Local container development**: podman-bootc, podman-compose, podmansh, macadam, gvisor-tap-vsock - [Comprehensive container development environment]
+- **Fonts**: Nerd-fonts, Ubuntu fonts, Google fonts, IBM Plex Mono - [Expanded typography options for modern tools]
+
+### Added Applications (Runtime)
+- **CLI Tools (Homebrew)**: bat, eza, fd, rg, gh, starship, zoxide, tmux, htop - [Modern CLI utilities and fast developer workflow tools]
+- **GUI Apps (Flatpak)**: Steam, Heroic, Chrome, Edge, Spotify, Discord, Slack, VLC, Podman Desktop, Extension Manager - [Rich set of daily productivity, development, and gaming apps preinstalled]
+
+### Removed/Disabled
+- **Removed**: firefox, gnome-software, gnome-extensions-app, yubikey-manager, gnome-terminal-nautilus, gnome-software-rpm-ostree
+- **Rationale**: Replaced by Flatpak alternatives and third-party browsers; reduces system image footprint by removing redundant default apps.
+
+### Configuration Changes
+- **Services**: `podman.socket` is enabled by default to support local container dev.
+- **Visuals**: Included custom dynamic wallpapers installer during the build phase.
+- **Integration**: Merges `@projectbluefin/common` Just recipes alongside custom `.just` configurations.
+
+*Last updated: 2026-03-01*
+
+---
+
+## Finpilot
 A template for building custom bootc operating system images based on the lessons from [Universal Blue](https://universal-blue.org/) and [Bluefin](https://projectbluefin.io). It is designed to be used manually, but is optimized to be bootstraped by GitHub Copilot. After set up you'll have your own custom Linux. 
 
 This template uses the **multi-stage build architecture** from , combining resources from multiple OCI containers for modularity and maintainability. See the [Architecture](#architecture) section below for details.
