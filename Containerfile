@@ -45,8 +45,8 @@ COPY custom /custom
 
 # Remove Bluefin branding and artwork
 #RUN rm -rf /oci/branding /oci/artwork
-COPY --from=ghcr.io/projectbluefin/common:latest@sha256:a5ef5b52d44b4ef7fd2df83aaf02d95af49ec3133644be99bd09d0c449b16d93 /system_files/shared /oci/common/shared
-COPY --from=ghcr.io/projectbluefin/common:latest@sha256:a5ef5b52d44b4ef7fd2df83aaf02d95af49ec3133644be99bd09d0c449b16d93 /system_files/bluefin/usr/share/ublue-os/just /oci/common/bluefin/usr/share/ublue-os/just
+COPY --from=ghcr.io/projectbluefin/common:latest@sha256:b9a75b68a14211b36389402564a2cf2f9369290027ecf5f05df2d5f9cf36450a /system_files/shared /oci/common/shared
+COPY --from=ghcr.io/projectbluefin/common:latest@sha256:b9a75b68a14211b36389402564a2cf2f9369290027ecf5f05df2d5f9cf36450a /system_files/bluefin/usr/share/ublue-os/just /oci/common/bluefin/usr/share/ublue-os/just
 
 COPY --from=ghcr.io/ublue-os/brew:latest@sha256:ca91068f51ce663d495ccfc829352d6621ec95f6c7db447ade55023b222f9762 /system_files /oci/brew
 
