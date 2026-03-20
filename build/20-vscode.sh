@@ -16,7 +16,7 @@ gpgcheck=1
 gpgkey=https://packages.microsoft.com/keys/microsoft.asc
 EOF
 
-# Install Chrome
+# Install vscode
 dnf5 install -y code
 
 # Clean up repo file (required - repos don't work at runtime in bootc images)
