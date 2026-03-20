@@ -117,13 +117,6 @@ echo "::endgroup::"
 
 echo "::group:: System Configuration"
 
-# Enable/disable systemd services
-systemctl enable podman.socket
-# Example: systemctl mask unwanted-service
-#systemctl preset brew-setup.service
-#systemctl preset brew-update.timer
-#systemctl preset brew-upgrade.timer
-
 echo "::endgroup::"
 
 # Restore default glob behavior
