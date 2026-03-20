@@ -12,7 +12,7 @@ systemctl enable podman.socket
 #systemctl preset brew-update.timer
 #systemctl preset brew-upgrade.timer
 
-systemctl disable rpm-ostree.service
+systemctl disable rpm-ostreed-automatic.service rpm-ostreed-automatic.timer 
 systemctl enable uupd.timer
 systemctl mask bootc-fetch-apply-updates.timer bootc-fetch-apply-updates.service
 
