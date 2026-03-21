@@ -134,9 +134,10 @@ jobs:
             quay.io/fedora/fedora-bootc:43 \
             rechunk --max-layers 67 \
             localhost/"${{ env.IMAGE_NAME }}:${{ env.DEFAULT_TAG }}" \
-            localhost/"${{ env.IMAGE_NAME }}:${{ env.DEFAULT_TAG }}"
+            localhost/"${{ env.IMAGE_NAME }}:${{ env.DEFAULT_TAG }}-rechunked"
           
           echo "Loading image back into rootless storage ..."
+          podman tag localhost/"${{ env.IMAGE_NAME }}:${{ env.DEFAULT_TAG }}-rechunked" localhost/"${{ env.IMAGE_NAME }}:${{ env.DEFAULT_TAG }}
           sudo podman save -o image.tar localhost/"${{ env.IMAGE_NAME }}:${{ env.DEFAULT_TAG }}"
           podman load < image.tar
           echo "... done."
