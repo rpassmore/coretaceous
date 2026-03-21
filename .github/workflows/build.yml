@@ -123,6 +123,7 @@ jobs:
 
           sudo podman build \
             "${LABEL_ARGS[@]}" \
+            --cache-from ghcr.io/${{ github.repository_owner }} \
             --tag localhost/${{ env.IMAGE_NAME }}:${{ env.DEFAULT_TAG }} \
             --file ./Containerfile \
             --format oci
