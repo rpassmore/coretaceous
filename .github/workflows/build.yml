@@ -118,29 +118,36 @@ jobs:
           labels: ${{ steps.metadata.outputs.labels }}
           oci: true
 
-      - name: Rechunk Image
-        run: |
-          sudo podman run --rm --privileged \
-            -v /var/lib/containers:/var/lib/containers \
-            --entrypoint /usr/libexec/bootc-base-imagectl \
-            "localhost/${IMAGE_NAME}:${DEFAULT_TAG}" \
-            rechunk --max-layers 96 \
-            "localhost/${IMAGE_NAME}:${DEFAULT_TAG}" \
-            "localhost/${IMAGE_NAME}:${DEFAULT_TAG}"
-
       # - name: Rechunk Image
       #   run: |
-      #     echo "Saving image to rootful storage ..."
-      #     podman save -o image.tar localhost/"${{ env.IMAGE_NAME }}:${{ env.DEFAULT_TAG }}"
-      #     sudo podman image load < image.tar
-      #     echo "... done."
       #     sudo podman run --rm --privileged \
       #       -v /var/lib/containers:/var/lib/containers \
       #       --entrypoint /usr/libexec/bootc-base-imagectl \
-      #       quay.io/fedora/fedora-bootc:43 \
-      #       rechunk --max-layers 67 \
-      #       localhost/"${{ env.IMAGE_NAME }}:${{ env.DEFAULT_TAG }}" \
-      #       localhost/"${{ env.IMAGE_NAME }}:${{ env.DEFAULT_TAG }}"     
+      #       "localhost/${IMAGE_NAME}:${DEFAULT_TAG}" \
+      #       rechunk --max-layers 96 \
+      #       "localhost/${IMAGE_NAME}:${DEFAULT_TAG}" \
+      #       "localhost/${IMAGE_NAME}:${DEFAULT_TAG}"
+
+      - name: Rechunk Image
+        run: |
+          echo "Saving image to rootful storage ..."
+          podman save -o image.tar localhost/"${{ env.IMAGE_NAME }}:${{ env.DEFAULT_TAG }}"
+          sudo podman image load < image.tar
+          rm image.tar
+          echo "... done."
+          
+          sudo podman run --rm --privileged \
+            -v /var/lib/containers:/var/lib/containers \
+            --entrypoint /usr/libexec/bootc-base-imagectl \
+            quay.io/fedora/fedora-bootc:43 \
+            rechunk --max-layers 67 \
+            localhost/"${{ env.IMAGE_NAME }}:${{ env.DEFAULT_TAG }}" \
+            localhost/"${{ env.IMAGE_NAME }}:${{ env.DEFAULT_TAG }}"
+          
+          echo "Loading image back into rootless storage ..."
+          sudo podman save -o image.tar localhost/"${{ env.IMAGE_NAME }}:${{ env.DEFAULT_TAG }}"
+          podman load < image.tar
+          echo "... done."
 
 
       # Tag for registry
