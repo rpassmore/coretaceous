@@ -69,25 +69,14 @@ FROM ghcr.io/ublue-os/silverblue-nvidia@sha256:79c5faa6591bb66ac1ad61b89383a3232
 ##   - Files from @ublue-os/artwork at /oci/artwork
 ##   - Files from @ublue-os/brew at /oci/brew
 ## Scripts are run in numerical order (10-build.sh, 20-example.sh, etc.)
-
+ARG MOUNTS="--mount=type=bind,from=ctx,source=/,target=/ctx \
+    --mount=type=cache,dst=/var/cache \
+    --mount=type=cache,dst=/var/log \
+    --mount=type=tmpfs,dst=/tmp"
 # Use seperate RUN steps to improve cache hits over calling a single script that calls all other the scripts
-RUN --mount=type=bind,from=ctx,source=/,target=/ctx \
-    --mount=type=cache,dst=/var/cache \
-    --mount=type=cache,dst=/var/log \
-    --mount=type=tmpfs,dst=/tmp \
-    /ctx/build/10-base.sh
-
-RUN --mount=type=bind,from=ctx,source=/,target=/ctx \
-    --mount=type=cache,dst=/var/cache \
-    --mount=type=cache,dst=/var/log \
-    --mount=type=tmpfs,dst=/tmp \
-    /ctx/build/20-packages.sh
-
-RUN --mount=type=bind,from=ctx,source=/,target=/ctx \
-    --mount=type=cache,dst=/var/cache \
-    --mount=type=cache,dst=/var/log \
-    --mount=type=tmpfs,dst=/tmp \
-    /ctx/build/30-config.sh
+RUN $MOUNTS /ctx/build/10-build.sh
+RUN $MOUNTS /ctx/build/20-vscode.sh
+RUN $MOUNTS /ctx/build/30-services.sh
 
 ### LINTING
 ## Verify final image and contents are correct.
