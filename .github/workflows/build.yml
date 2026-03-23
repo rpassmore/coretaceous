@@ -20,7 +20,6 @@ env:
   IMAGE_NAME: "${{ github.event.repository.name }}"  # output image name, usually same as repo name
   IMAGE_REGISTRY: "ghcr.io/${{ github.repository_owner }}"  # do not edit
   DEFAULT_TAG: "stable"
-  CACHE_IMAGE: "ghcr.io/${{ github.repository_owner }}/${{ github.event.repository.name }}-buildcache"
 
 concurrency:
   group: ${{ github.workflow }}-${{ github.ref || github.run_id }}-${{ inputs.brand_name}}-${{ inputs.stream_name }}
@@ -125,18 +124,8 @@ jobs:
 
           sudo buildah bud \
             "${LABEL_ARGS[@]}" \
-            --layers \
-            --cache-from ${{ env.CACHE_IMAGE }} \
-            --cache-to ${{ env.CACHE_IMAGE }} \
             -t localhost/${{ env.IMAGE_NAME }}:${{ env.DEFAULT_TAG }} \
             -f ./Containerfile
-
-          # sudo podman build \
-          #   "${LABEL_ARGS[@]}" \
-          #   --cache-from ghcr.io/${{ github.repository_owner }} \
-          #   --tag localhost/${{ env.IMAGE_NAME }}:${{ env.DEFAULT_TAG }} \
-          #   --file ./Containerfile \
-          #   --format oci
 
       - name: Rechunk Image
         # Only rechunk on the main branch as it takes a long time and don't push images from other branches anyway
