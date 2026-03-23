@@ -61,7 +61,7 @@ jobs:
         continue-on-error: true 
         with:
           target-dir: /var/lib/containers
-          mount-opts: compress-force=zstd:2
+          mount-opts: compress-force=zstd:2 --storage-driver overlay
 
       - name: Get current date
         id: date
@@ -105,48 +105,46 @@ jobs:
           sep-tags: " "
           sep-annotations: " "
 
-      - name: Build Image
-        id: build_image
-        uses: redhat-actions/buildah-build@7a95fa7ee0f02d552a32753e7414641a04307056 # v2
-        with:
-          containerfiles: |
-            ./Containerfile
-          # Postfix image name with -custom to make it a little more descriptive
-          # Syntax: https://docs.github.com/en/actions/learn-github-actions/expressions#format
-          image: ${{ env.IMAGE_NAME }}
-          tags: ${{ env.DEFAULT_TAG }}
-          labels: ${{ steps.metadata.outputs.labels }}
-          oci: true
+      - name: Login to GHCR
+        if: github.event_name != 'pull_request'
+        run: |
+          echo "${{ secrets.GITHUB_TOKEN }}" | sudo buildah login -u ${{ github.actor }} --password-stdin ghcr.io
+      
+      - name: Build Image (rootful)
+        env:
+          LABELS: ${{ steps.metadata.outputs.labels }}
+        run: |
+          # Read the multiline labels string into an array of --label arguments
+          declare -a LABEL_ARGS
+          while IFS= read -r line; do
+            if [ -n "$line" ]; then
+              LABEL_ARGS+=("--label" "$line")
+            fi
+          done <<< "$LABELS"
+
+          sudo buildah bud \
+            "${LABEL_ARGS[@]}" \
+            -t localhost/${{ env.IMAGE_NAME }}:${{ env.DEFAULT_TAG }} \
+            -f ./Containerfile
 
       - name: Rechunk Image
         # Only rechunk on the main branch as it takes a long time and don't push images from other branches anyway
         if: github.event_name != 'pull_request' && github.ref == format('refs/heads/{0}', github.event.repository.default_branch)
         run: |
-          echo "Saving image to rootful storage ..."
-          podman save -o image.tar localhost/"${{ env.IMAGE_NAME }}:${{ env.DEFAULT_TAG }}"
-          sudo podman image load < image.tar
-          rm image.tar
-          echo "... done."
-          
           sudo podman run --rm --privileged \
             -v /var/lib/containers:/var/lib/containers \
             --entrypoint /usr/libexec/bootc-base-imagectl \
             quay.io/fedora/fedora-bootc:43 \
             rechunk --max-layers 67 \
-            localhost/"${{ env.IMAGE_NAME }}:${{ env.DEFAULT_TAG }}" \
-            localhost/"${{ env.IMAGE_NAME }}:${{ env.DEFAULT_TAG }}"
-          
-          echo "Loading image back into rootless storage ..."
-          sudo podman save -o image.tar localhost/"${{ env.IMAGE_NAME }}:${{ env.DEFAULT_TAG }}"
-          podman load < image.tar
-          echo "... done."
-
+            localhost/${{ env.IMAGE_NAME }}:${{ env.DEFAULT_TAG }} \
+            localhost/${{ env.IMAGE_NAME }}:${{ env.DEFAULT_TAG }}-rechunked
+          sudo podman tag localhost/"${{ env.IMAGE_NAME }}:${{ env.DEFAULT_TAG }}-rechunked" localhost/"${{ env.IMAGE_NAME }}:${{ env.DEFAULT_TAG }}"
 
       # Tag for registry
       - name: Tag for registry
         run: |
           for tag in ${{ steps.metadata.outputs.tags }}; do
-            podman tag ${{ env.IMAGE_NAME }}:${{ env.DEFAULT_TAG }} ${{ env.IMAGE_NAME }}:$tag
+            sudo podman tag ${{ env.IMAGE_NAME }}:${{ env.DEFAULT_TAG }} ${{ env.IMAGE_NAME }}:$tag
           done
 
       # SBOM (OPTIONAL): Software Bill of Materials generation using Syft
