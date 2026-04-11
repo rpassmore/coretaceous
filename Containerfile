@@ -43,7 +43,7 @@ COPY custom /custom
 # Note: Renovate can automatically update these :latest tags to SHA-256 digests for reproducibility
 COPY --from=ghcr.io/projectbluefin/common:latest@sha256:c963ca0007163eadf4108110c30b6f6dde1daf4a2002273a61be03ed46d909ab /system_files/shared /oci/common/shared
 COPY --from=ghcr.io/projectbluefin/common:latest@sha256:c963ca0007163eadf4108110c30b6f6dde1daf4a2002273a61be03ed46d909ab /system_files/bluefin/usr/share/ublue-os/just /oci/common/bluefin/usr/share/ublue-os/just
-COPY --from=ghcr.io/ublue-os/brew:latest@sha256:a0e777dc809c12c6137f13163e6a7345e56d583f057a376d7e55e68a0ab65d68 /system_files /oci/brew
+COPY --from=ghcr.io/ublue-os/brew:latest@sha256:893a916a675c7d22b1140b7766c6d03b601c231e1e6aefbc57434bc27f32279e /system_files /oci/brew
 
 # Base Image - GNOME included
 FROM ghcr.io/ublue-os/silverblue-nvidia:43@sha256:d0d4751fce7a126173ea71f2305f687ff9fe2d245f8559ae8e38fe2c8862f2cd
