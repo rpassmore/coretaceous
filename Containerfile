@@ -46,7 +46,7 @@ COPY --from=ghcr.io/projectbluefin/common:latest@sha256:c963ca0007163eadf4108110
 COPY --from=ghcr.io/ublue-os/brew:latest@sha256:615439b696bc0d9756850506f803e77a88cae032af1f933b876dddc2bd62d1f7 /system_files /oci/brew
 
 # Base Image - GNOME included
-FROM ghcr.io/ublue-os/silverblue-nvidia:43@sha256:43b4b97cf2883bee6c01510b412207d660f6f5b59c88541eb66934c1589d5b62
+FROM ghcr.io/ublue-os/silverblue-nvidia:43@sha256:055e9fe97c4552cbd7d7f5cda1a30797ba19fbf1a12499bd13b724d22fe1f6fd
 
 ### /opt
 ## Some bootable images, like Fedora, have /opt symlinked to /var/opt, in order to
