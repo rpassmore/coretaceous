@@ -41,9 +41,9 @@ COPY build /build
 COPY custom /custom
 # Copy from OCI containers to distinct subdirectories to avoid conflicts
 # Note: Renovate can automatically update these :latest tags to SHA-256 digests for reproducibility
-COPY --from=ghcr.io/projectbluefin/common:latest@sha256:f3070c22c90a189848937e4a74e24fa132a538dff722410c3aaa36f7a3c9240e /system_files/shared /oci/common/shared
-COPY --from=ghcr.io/projectbluefin/common:latest@sha256:f3070c22c90a189848937e4a74e24fa132a538dff722410c3aaa36f7a3c9240e /system_files/bluefin/usr/share/ublue-os/just /oci/common/bluefin/usr/share/ublue-os/just
-COPY --from=ghcr.io/ublue-os/brew:latest@sha256:615439b696bc0d9756850506f803e77a88cae032af1f933b876dddc2bd62d1f7 /system_files /oci/brew
+COPY --from=ghcr.io/projectbluefin/common:latest@sha256:47abba6e2a15e36efcb18255fefa7c65673337404719a925d74409c6e080929e /system_files/shared /oci/common/shared
+COPY --from=ghcr.io/projectbluefin/common:latest@sha256:47abba6e2a15e36efcb18255fefa7c65673337404719a925d74409c6e080929e /system_files/bluefin/usr/share/ublue-os/just /oci/common/bluefin/usr/share/ublue-os/just
+COPY --from=ghcr.io/ublue-os/brew:latest@sha256:7646a12d0369270ba479bde05d69e273af966a55178f283b0f717381d086ca7a /system_files /oci/brew
 
 # Base Image - GNOME included
 FROM ghcr.io/ublue-os/silverblue-nvidia:43@sha256:dc266933fe2e2c1658aaedae0a2520708b09aeca833b0283b5c5762f79400fee
