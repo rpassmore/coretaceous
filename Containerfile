@@ -45,6 +45,8 @@ COPY --from=ghcr.io/projectbluefin/common:latest@sha256:c1fcbdf3ccf0aaba71f8aaf2
 COPY --from=ghcr.io/projectbluefin/common:latest@sha256:c1fcbdf3ccf0aaba71f8aaf2b2a5bd0bc507e6d33c8433bdf29584cd705a41cb /system_files/bluefin/usr/share/ublue-os/just /oci/common/bluefin/usr/share/ublue-os/just
 COPY --from=ghcr.io/ublue-os/brew:latest@sha256:7646a12d0369270ba479bde05d69e273af966a55178f283b0f717381d086ca7a /system_files /oci/brew
 
+COPY --from=ghcr.io/rpassmore/linux-dynamic-wallpapers:latest@sha256:8da21e6dd282a6453d076083e6e3823f48aa4df0dede843e43f5bbd8dc1a4d41 /system_files /oci/wallpapers
+
 # Base Image - GNOME included
 FROM ghcr.io/ublue-os/silverblue-nvidia:43@sha256:e7c8bd062f281be61d9a426f243bcca6145f45fcea8209965758b0ac8bc57b24
 

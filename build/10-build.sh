@@ -117,12 +117,6 @@ mkdir -p /var/usr/local/bin
 curl -L -o /var/usr/local/bin/macadam https://github.com/crc-org/macadam/releases/download/v0.2.0/macadam-linux-amd64
 chmod +x /var/usr/local/bin/macadam
 
-# Install dynamic wallpapers
-WALLPAPER_VERSION="v1.0.0"
-curl -L \
-  "https://raw.githubusercontent.com/rpassmore/Linux_Dynamic_Wallpapers/${WALLPAPER_VERSION}/Easy_Install.sh" \
-  | bash
-
 echo "::endgroup::"
 
 echo "::group:: System Configuration"
