@@ -88,9 +88,7 @@ dnf5 -y install \
     ibm-plex-mono-fonts \
     google-noto-sans-mono-fonts \
     google-noto-sans-fonts \
-    google-noto-emoji-fonts \
-    google-noto-color-emoji-fonts \
-    oogle-noto-serif-fonts
+    google-noto-serif-fonts
 copr_install_isolated "che/nerd-fonts" nerd-fonts
 copr_install_isolated "atim/ubuntu-fonts" ubuntu-family-fonts
 
@@ -101,7 +99,6 @@ dnf5 -y install \
     podman-compose \
     podmansh \
     gvisor-tap-vsock
-
 
 # Remove packages
 dnf5 remove -y \
