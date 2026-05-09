@@ -138,13 +138,13 @@ jobs:
             rechunk --max-layers 128 \
             localhost/${{ env.IMAGE_NAME }}:${{ env.DEFAULT_TAG }} \
             localhost/${{ env.IMAGE_NAME }}:${{ env.DEFAULT_TAG }}-rechunked
-          sudo podman tag localhost/"${{ env.IMAGE_NAME }}:${{ env.DEFAULT_TAG }}-rechunked" localhost/"${{ env.IMAGE_NAME }}:${{ env.DEFAULT_TAG }}"
+          sudo podman tag localhost/${{ env.IMAGE_NAME }}:${{ env.DEFAULT_TAG }}-rechunked localhost/${{ env.IMAGE_NAME }}:${{ env.DEFAULT_TAG }}
 
       # Tag for registry
       - name: Tag for registry
         run: |
           for tag in ${{ steps.metadata.outputs.tags }}; do
-            sudo podman tag ${{ env.IMAGE_NAME }}:${{ env.DEFAULT_TAG }} ${{ env.IMAGE_NAME }}:$tag
+            sudo podman tag localhost/${{ env.IMAGE_NAME }}:${{ env.DEFAULT_TAG }} localhost/${{ env.IMAGE_NAME }}:$tag
           done
 
       # SBOM (OPTIONAL): Software Bill of Materials generation using Syft
