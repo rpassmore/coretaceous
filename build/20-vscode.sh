@@ -20,7 +20,7 @@ EOF
 dnf5 install -y code
 
 # Add VsCode to its own bootc layer
-find /usr/bin/code -exec \
+find /usr/share/code -exec \
   setfattr -n user.component -v vscode {} +
 
 # Clean up repo file (required - repos don't work at runtime in bootc images)
