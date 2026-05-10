@@ -19,6 +19,12 @@ EOF
 # Install vscode
 dnf5 install -y code
 
+# Add VsCode to its own bootc layer
+setfattr -R \
+  -n user.component \
+  -v vscode \
+  /usr/bin/code
+
 # Clean up repo file (required - repos don't work at runtime in bootc images)
 rm -f /etc/yum.repos.d/vs-code.repo
 
