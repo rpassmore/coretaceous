@@ -11,6 +11,7 @@ systemctl enable podman.socket
 #systemctl preset brew-setup.service
 #systemctl preset brew-update.timer
 #systemctl preset brew-upgrade.timer
+enable brew-setup.service
 
 systemctl disable rpm-ostreed-automatic.service rpm-ostreed-automatic.timer 
 systemctl enable uupd.timer
