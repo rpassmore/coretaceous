@@ -77,6 +77,9 @@ dnf5 -y install \
     gnome-backgrounds-extras \
     gnome-tweaks
 
+find /usr/share/gnome-shell/extensions -exec \
+  setfattr -n user.component -v gnome-extensions {} +
+
 copr_install_isolated "atim/starship" starship
 copr_install_isolated "ublue-os/packages" uupd
 
@@ -106,10 +109,8 @@ copr_install_isolated "che/nerd-fonts" nerd-fonts
 copr_install_isolated "atim/ubuntu-fonts" ubuntu-family-fonts
 
 # Create a dedicated OCI component for fonts
-setfattr -R \
-  -n user.component \
-  -v fonts \
-  /usr/share/fonts
+find /usr/share/fonts -exec \
+  setfattr -n user.component -v fonts {} +
 
 echo "::endgroup::"
 
