@@ -29,6 +29,7 @@ echo "::endgroup::"
 echo "::group:: Copy Custom Files"
 
 # Copy Brewfiles to standard location
+cp -r /ctx/oci/brew /
 mkdir -p /usr/share/ublue-os/homebrew/
 cp /ctx/custom/brew/*.Brewfile /usr/share/ublue-os/homebrew/
 
@@ -97,20 +98,20 @@ echo "::endgroup::"
 echo "::group:: Install Fonts"
 
 # Install fonts
-dnf5 -y install \
-    google-droid-sans-mono-fonts \
-    google-go-mono-fonts \
-    powerline-fonts \
-    ibm-plex-mono-fonts \
-    google-noto-sans-mono-fonts \
-    google-noto-sans-fonts \
-    google-noto-serif-fonts
-copr_install_isolated "che/nerd-fonts" nerd-fonts
-copr_install_isolated "atim/ubuntu-fonts" ubuntu-family-fonts
+#dnf5 -y install \
+#    google-droid-sans-mono-fonts \
+#    google-go-mono-fonts \
+#    powerline-fonts \
+#    ibm-plex-mono-fonts \
+#    google-noto-sans-mono-fonts \
+#    google-noto-sans-fonts \
+#    google-noto-serif-fonts
+#copr_install_isolated "che/nerd-fonts" nerd-fonts
+#copr_install_isolated "atim/ubuntu-fonts" ubuntu-family-fonts
 
 # Create a dedicated OCI component for fonts
-find /usr/share/fonts -exec \
-  setfattr -n user.component -v fonts {} +
+#find /usr/share/fonts -exec \
+#  setfattr -n user.component -v fonts {} +
 
 echo "::endgroup::"
 
