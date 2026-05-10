@@ -29,7 +29,7 @@ echo "::endgroup::"
 echo "::group:: Copy Custom Files"
 
 # Copy Brewfiles to standard location
-cp -r /ctx/oci/brew /
+cp -r /ctx/oci/brew/* /
 mkdir -p /usr/share/ublue-os/homebrew/
 cp /ctx/custom/brew/*.Brewfile /usr/share/ublue-os/homebrew/
 
