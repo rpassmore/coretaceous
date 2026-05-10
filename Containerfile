@@ -47,6 +47,8 @@ COPY --from=ghcr.io/ublue-os/brew:latest@sha256:9dab9ce3232b96d289d131201e007284
 
 COPY --from=ghcr.io/rpassmore/linux-dynamic-wallpapers:latest@sha256:8da21e6dd282a6453d076083e6e3823f48aa4df0dede843e43f5bbd8dc1a4d41 /system_files /oci/wallpapers
 
+COPY --from=ghcr.io/rpassmore/linux-dynamic-wallpapers:latest@sha256:8da21e6dd282a6453d076083e6e3823f48aa4df0dede843e43f5bbd8dc1a4d41 /system_files /oci/wallpapers
+
 # Base Image - GNOME included
 FROM ghcr.io/ublue-os/silverblue-nvidia:43@sha256:e7c8bd062f281be61d9a426f243bcca6145f45fcea8209965758b0ac8bc57b24
 
