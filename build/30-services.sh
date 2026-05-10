@@ -8,10 +8,10 @@ echo "Setting up services..."
 systemctl enable podman.socket
 
 # These should be handled by uupd
-#systemctl preset brew-setup.service
-#systemctl preset brew-update.timer
-#systemctl preset brew-upgrade.timer
-systemctl enable brew-setup.service
+systemctl preset brew-setup.service
+systemctl preset brew-update.timer
+systemctl preset brew-upgrade.timer
+#systemctl enable brew-setup.service
 
 systemctl disable rpm-ostreed-automatic.service rpm-ostreed-automatic.timer 
 systemctl enable uupd.timer
