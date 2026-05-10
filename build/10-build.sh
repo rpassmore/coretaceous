@@ -80,6 +80,19 @@ dnf5 -y install \
 copr_install_isolated "atim/starship" starship
 copr_install_isolated "ublue-os/packages" uupd
 
+
+# Install tooling needed to develop bootc containers locally
+copr_install_isolated "gmaglione/podman-bootc" podman-bootc
+dnf5 -y install \
+    osbuild-selinux \
+    podman-compose \
+    podmansh \
+    gvisor-tap-vsock
+
+echo "::endgroup::"
+
+echo "::group:: Install Fonts"
+
 # Install fonts
 dnf5 -y install \
     google-droid-sans-mono-fonts \
@@ -92,13 +105,15 @@ dnf5 -y install \
 copr_install_isolated "che/nerd-fonts" nerd-fonts
 copr_install_isolated "atim/ubuntu-fonts" ubuntu-family-fonts
 
-# Install tooling needed to develop bootc containers locally
-copr_install_isolated "gmaglione/podman-bootc" podman-bootc
-dnf5 -y install \
-    osbuild-selinux \
-    podman-compose \
-    podmansh \
-    gvisor-tap-vsock
+# Create a dedicated OCI component for fonts
+setfattr -R \
+  -n user.component \
+  -v fonts \
+  /usr/share/fonts
+
+echo "::endgroup::"
+
+echo "::group:: Remove Packages"
 
 # Remove packages
 dnf5 remove -y \
@@ -110,6 +125,8 @@ dnf5 remove -y \
     gnome-software-rpm-ostree \
     gnome-terminal-nautilus \
     yubikey-manager
+
+echo "::endgroup::"
 
 # Install macadam it is needed by the podman-desktop-bootc extension, but is not packaged by fedora yet.
 # Ensure /var/usr/local exists (needed because /usr/local is a symlink to it)
