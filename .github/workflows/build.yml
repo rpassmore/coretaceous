@@ -108,7 +108,7 @@ jobs:
       - name: Login to GHCR
         if: github.event_name != 'pull_request'
         run: |
-          echo "${{ secrets.GITHUB_TOKEN }}" | sudo buildah login -u ${{ github.actor }} --password-stdin ghcr.io
+          echo "${{ secrets.GITHUB_TOKEN }}" | buildah login -u ${{ github.actor }} --password-stdin ghcr.io
       
       - name: Build Image (rootful)
         env:
@@ -122,7 +122,7 @@ jobs:
             fi
           done <<< "$LABELS"
 
-          sudo buildah bud \
+          buildah bud \
             "${LABEL_ARGS[@]}" \
             -t localhost/${{ env.IMAGE_NAME }}:${{ env.DEFAULT_TAG }} \
             -f ./Containerfile
@@ -133,7 +133,7 @@ jobs:
         #if: github.event_name != 'pull_request' && github.ref == format('refs/heads/{0}', github.event.repository.default_branch)
         run: |
           IMG=localhost/${{ env.IMAGE_NAME }}:${{ env.DEFAULT_TAG }}
-          sudo podman run --rm --mount=type=image,src=$IMG,dest=/chunkah \
+          podman run --rm --mount=type=image,src=$IMG,dest=/chunkah \
           -e CHUNKAH_CONFIG_STR="$(podman inspect $IMG)" \
           quay.io/fedora/fedora-bootc:rawhide \
           /usr/libexec/bootc-base-imagectl rechunk --max-layers 128 --chunkah | podman load
@@ -155,7 +155,7 @@ jobs:
       - name: Tag for registry
         run: |
           for tag in ${{ steps.metadata.outputs.tags }}; do
-            sudo podman tag localhost/${{ env.IMAGE_NAME }}:${{ env.DEFAULT_TAG }} localhost/${{ env.IMAGE_NAME }}:$tag
+            podman tag localhost/${{ env.IMAGE_NAME }}:${{ env.DEFAULT_TAG }} localhost/${{ env.IMAGE_NAME }}:$tag
           done
 
       # SBOM (OPTIONAL): Software Bill of Materials generation using Syft
@@ -199,7 +199,7 @@ jobs:
         id: push
         run: |
           for tag in ${{ steps.metadata.outputs.tags }}; do
-            sudo podman push \
+            podman push \
               --compression-format zstd:chunked \
               localhost/${{ env.IMAGE_NAME }}:$tag ${{ env.IMAGE_REGISTRY }}/${{ env.IMAGE_NAME }}:$tag
           done
