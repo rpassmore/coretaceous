@@ -111,7 +111,7 @@ jobs:
       - name: Login to GHCR
         if: github.event_name != 'pull_request'
         run: |
-          echo "${{ secrets.GITHUB_TOKEN }}" | buildah login -u ${{ github.actor }} --password-stdin ghcr.io
+          echo "${{ secrets.GITHUB_TOKEN }}" | sudo buildah login -u ${{ github.actor }} --password-stdin ghcr.io
       
       - name: Build Image (rootful)
         env:
@@ -125,20 +125,20 @@ jobs:
             fi
           done <<< "$LABELS"
 
-          buildah bud \
+          sudo buildah bud \
             "${LABEL_ARGS[@]}" \
             -t localhost/${{ env.IMAGE_NAME }}:${{ env.DEFAULT_TAG }} \
             -f ./Containerfile
 
       - name: Debug podman storage
         run: |
-          podman info --debug
-          podman version
+          sudo podman info --debug
+          sudo podman version
 
       - name: Test image mount support
         run: |
           IMG=localhost/${{ env.IMAGE_NAME }}:${{ env.DEFAULT_TAG }}
-          podman run --rm \
+          sudo podman run --rm \
           --mount=type=image,src=$IMG,dst=/test \
           quay.io/fedora/fedora:latest \
           ls /test
@@ -155,12 +155,12 @@ jobs:
 #          /usr/libexec/bootc-base-imagectl rechunk --max-layers 128 --chunkah | podman load
         run: |
           IMG=localhost/${{ env.IMAGE_NAME }}:${{ env.DEFAULT_TAG }}
-          export CHUNKAH_CONFIG_STR="$(podman inspect $IMG --format '{{json .}}')"
-          podman run --rm --mount=type=image,src=$IMG,dest=/chunkah \
+          export CHUNKAH_CONFIG_STR="$(sudo podman inspect $IMG --format '{{json .}}')"
+          sudo podman run --rm --mount=type=image,src=$IMG,dest=/chunkah \
           -e CHUNKAH_CONFIG_STR="$CHUNKAH_CONFIG_STR" \
           quay.io/coreos/chunkah build \
-          -t localhost/${{ env.IMAGE_NAME }}:${{ env.DEFAULT_TAG }}-rechunked | podman load
-          podman tag localhost/${{ env.IMAGE_NAME }}:${{ env.DEFAULT_TAG }}-rechunked localhost/${{ env.IMAGE_NAME }}:${{ env.DEFAULT_TAG }}
+          -t localhost/${{ env.IMAGE_NAME }}:${{ env.DEFAULT_TAG }}-rechunked | sudo podman load
+          sudo podman tag localhost/${{ env.IMAGE_NAME }}:${{ env.DEFAULT_TAG }}-rechunked localhost/${{ env.IMAGE_NAME }}:${{ env.DEFAULT_TAG }}
 
 
         # Only rechunk on the main branch as it takes a long time and don't push images from other branches anyway
@@ -179,7 +179,7 @@ jobs:
       - name: Tag for registry
         run: |
           for tag in ${{ steps.metadata.outputs.tags }}; do
-            podman tag localhost/${{ env.IMAGE_NAME }}:${{ env.DEFAULT_TAG }} localhost/${{ env.IMAGE_NAME }}:$tag
+            sudo podman tag localhost/${{ env.IMAGE_NAME }}:${{ env.DEFAULT_TAG }} localhost/${{ env.IMAGE_NAME }}:$tag
           done
 
       # SBOM (OPTIONAL): Software Bill of Materials generation using Syft
@@ -223,7 +223,7 @@ jobs:
         id: push
         run: |
           for tag in ${{ steps.metadata.outputs.tags }}; do
-            podman push \
+            sudo podman push \
               --compression-format zstd:chunked \
               localhost/${{ env.IMAGE_NAME }}:$tag ${{ env.IMAGE_REGISTRY }}/${{ env.IMAGE_NAME }}:$tag
           done
