@@ -130,19 +130,6 @@ jobs:
             -t localhost/${{ env.IMAGE_NAME }}:${{ env.DEFAULT_TAG }} \
             -f ./Containerfile
 
-      - name: Debug podman storage
-        run: |
-          sudo podman info --debug
-          sudo podman version
-
-      - name: Test image mount support
-        run: |
-          IMG=localhost/${{ env.IMAGE_NAME }}:${{ env.DEFAULT_TAG }}
-          sudo podman run --rm \
-          --mount=type=image,src=$IMG,dst=/test \
-          quay.io/fedora/fedora:latest \
-          ls /test
-
       - name: Rechunk Image
         # Use chunkah instead ...
         # Only rechunk on the main branch as it takes a long time and don't push images from other branches anyway
@@ -156,7 +143,10 @@ jobs:
         run: |
           IMG=localhost/${{ env.IMAGE_NAME }}:${{ env.DEFAULT_TAG }}
           export CHUNKAH_CONFIG_STR="$(sudo podman inspect $IMG --format '{{json .}}')"
-          sudo podman run --rm --mount=type=image,src=$IMG,dest=/chunkah \
+          sudo podman run --rm \
+          --privileged \
+          -v /var/lib/containers:/var/lib/containers \
+          --mount=type=image,src=$IMG,dest=/chunkah \
           -e CHUNKAH_CONFIG_STR="$CHUNKAH_CONFIG_STR" \
           quay.io/coreos/chunkah build \
           -t localhost/${{ env.IMAGE_NAME }}:${{ env.DEFAULT_TAG }}-rechunked | sudo podman load
