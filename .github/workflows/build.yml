@@ -58,10 +58,13 @@ jobs:
 
         # Fallback to the remove-unwanted-software-action if github doesn't allocate enough space
         # See: https://github.com/ublue-os/container-storage-action/pull/11
-        continue-on-error: true 
+        continue-on-error: true
         with:
           target-dir: /var/lib/containers
-          mount-opts: compress-force=zstd:2 --storage-driver overlay
+          mount-opts: compress-force=zstd:2
+#        with:
+#          target-dir: /var/lib/containers
+#          mount-opts: compress-force=zstd:2 --storage-driver overlay
 
       - name: Get current date
         id: date
@@ -127,6 +130,19 @@ jobs:
             -t localhost/${{ env.IMAGE_NAME }}:${{ env.DEFAULT_TAG }} \
             -f ./Containerfile
 
+      - name: Debug podman storage
+        run: |
+          podman info --debug
+          podman version
+
+      - name: Test image mount support
+        run: |
+          IMG=localhost/${{ env.IMAGE_NAME }}:${{ env.DEFAULT_TAG }}
+          podman run --rm \
+          --mount=type=image,src=$IMG,dst=/test \
+          quay.io/fedora/fedora:latest \
+          ls /test
+
       - name: Rechunk Image
         # Use chunkah instead ...
         # Only rechunk on the main branch as it takes a long time and don't push images from other branches anyway
@@ -141,7 +157,8 @@ jobs:
           IMG=localhost/${{ env.IMAGE_NAME }}:${{ env.DEFAULT_TAG }}
           export CHUNKAH_CONFIG_STR="$(podman inspect $IMG)"
           podman run --rm --mount=type=image,src=$IMG,dest=/chunkah \
-          -e CHUNKAH_CONFIG_STR quay.io/coreos/chunkah build \
+          -e CHUNKAH_CONFIG_STR="$CHUNKAH_CONFIG_STR" \
+          quay.io/coreos/chunkah build \
           -t localhost/${{ env.IMAGE_NAME }}:${{ env.DEFAULT_TAG }}-rechunked | podman load
           podman tag localhost/${{ env.IMAGE_NAME }}:${{ env.DEFAULT_TAG }}-rechunked localhost/${{ env.IMAGE_NAME }}:${{ env.DEFAULT_TAG }}
 
