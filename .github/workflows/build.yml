@@ -49,7 +49,8 @@ jobs:
       - name: Setup podman
         id: setup-podman
         run: |
-          brew install podman
+          sudo brew install podman
+          sudo podman version
           podman version
 
       # These stage versions are pinned by https://github.com/renovatebot/renovate
