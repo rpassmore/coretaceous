@@ -41,7 +41,7 @@ jobs:
       options: --privileged # Required for nested container builds & rootless storage allocation
 
     steps:
-      - check:
+      - name: check
         run: |
           podman version
           buildah version
