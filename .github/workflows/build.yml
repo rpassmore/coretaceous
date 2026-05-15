@@ -14,6 +14,7 @@ on:
   workflow_dispatch:
 
 env:
+  STORAGE_DRIVER: overlay
   IMAGE_DESC: "My Customized Universal Blue Image"
   IMAGE_KEYWORDS: "bootc,ublue,universal-blue"
   IMAGE_LOGO_URL: "https://avatars.githubusercontent.com/u/120078124?s=200&v=4"  # Put your own image here for a fancy profile on https://artifacthub.io/!
@@ -148,34 +149,7 @@ jobs:
           podman run --rm --mount=type=image,src=$IMG,dest=/chunkah \
           -e CHUNKAH_CONFIG_STR="$(podman inspect $IMG)" \
           quay.io/fedora/fedora-bootc:44 \
-          /usr/libexec/bootc-base-imagectl rechunk --max-layers 128 --chunkah | podman load
-#        run: |
-#          IMG=localhost/${{ env.IMAGE_NAME }}:${{ env.DEFAULT_TAG }}
-#          export CHUNKAH_CONFIG_STR="$(podman inspect $IMG)"
-#          podman run --rm \
-#          --privileged \
-#          --security-opt label=type:unconfined_t \
-#          -v /var/lib/containers:/var/lib/containers \
-#          --mount=type=image,src=$IMG,dest=/chunkah \
-#          -e CHUNKAH_CONFIG_STR="$CHUNKAH_CONFIG_STR" \
-#          quay.io/coreos/chunkah build \
-#          -max-layers 120 \
-#          --prune /sysroot/ \
-#          -t localhost/${{ env.IMAGE_NAME }}:${{ env.DEFAULT_TAG }}-rechunked | podman load
-#          podman tag localhost/${{ env.IMAGE_NAME }}:${{ env.DEFAULT_TAG }}-rechunked localhost/${{ env.IMAGE_NAME }}:${{ env.DEFAULT_TAG }}
-       
-
-        # Only rechunk on the main branch as it takes a long time and don't push images from other branches anyway
-#        if: github.event_name != 'pull_request' && github.ref == format('refs/heads/{0}', github.event.repository.default_branch)
-#        run: |
-#          sudo podman run --rm --privileged \
-#            -v /var/lib/containers:/var/lib/containers \
-#            --entrypoint /usr/libexec/bootc-base-imagectl \
-#            quay.io/fedora/fedora-bootc:43 \
-#            rechunk --max-layers 128 \
-#            localhost/${{ env.IMAGE_NAME }}:${{ env.DEFAULT_TAG }} \
-#            localhost/${{ env.IMAGE_NAME }}:${{ env.DEFAULT_TAG }}-rechunked
-#          sudo podman tag localhost/${{ env.IMAGE_NAME }}:${{ env.DEFAULT_TAG }}-rechunked localhost/${{ env.IMAGE_NAME }}:${{ env.DEFAULT_TAG }}
+          /usr/libexec/bootc-base-imagectl rechunk --max-layers 128 --chunkah --prune /sysroot/ | podman load
 
       # Tag for registry
       - name: Tag for registry
