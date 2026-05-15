@@ -44,6 +44,14 @@ jobs:
 
       - name: Install Podman
         uses: redhat-actions/podman-install@main
+        with:
+          ubuntu-version: '24.04'
+          ubuntu-repository: 'kubic'
+
+      - name: Debug podman storage
+        run: |
+          podman info --debug
+          podman version  
 
       # These stage versions are pinned by https://github.com/renovatebot/renovate
       - name: Checkout
