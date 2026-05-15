@@ -62,9 +62,6 @@ jobs:
         with:
           target-dir: /var/lib/containers
           mount-opts: compress-force=zstd:2
-#        with:
-#          target-dir: /var/lib/containers
-#          mount-opts: compress-force=zstd:2 --storage-driver overlay
 
       - name: Get current date
         id: date
