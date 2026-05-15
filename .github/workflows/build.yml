@@ -43,7 +43,7 @@ jobs:
           echo "IMAGE_NAME=${IMAGE_NAME,,}" >> ${GITHUB_ENV}
 
       - name: Install Podman
-        uses: redhat-actions/podman-install@main
+        uses: redhat-actions/podman-install@92eb12467c2fc271e7781d006c413e17770230ed
         with:
           ubuntu-version: '24.04'
           ubuntu-repository: 'kubic'
