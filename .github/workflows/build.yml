@@ -37,7 +37,8 @@ jobs:
 
     # Run the entire job inside the official stable Podman container
     container:
-      image: quay.io/podman/stable:latest
+      image: quay.io/containers/aio:latest
+      #https://quay.io/fedora/fedora-bootc:44
       options: --privileged # Required for nested container builds & rootless storage allocation
 
     steps:
