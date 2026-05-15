@@ -46,6 +46,7 @@ jobs:
         run: |
           podman version
           buildah version
+          whoami
 
       - name: Prepare environment
         run: |
@@ -142,26 +143,26 @@ jobs:
         # Use chunkah instead ...
         # Only rechunk on the main branch as it takes a long time and don't push images from other branches anyway
         #if: github.event_name != 'pull_request' && github.ref == format('refs/heads/{0}', github.event.repository.default_branch)
-#        run: |
-#          IMG=localhost/${{ env.IMAGE_NAME }}:${{ env.DEFAULT_TAG }}
-#          podman run --rm --mount=type=image,src=$IMG,dest=/chunkah \
-#          -e CHUNKAH_CONFIG_STR="$(podman inspect $IMG)" \
-#          quay.io/fedora/fedora-bootc:44 \
-#          /usr/libexec/bootc-base-imagectl rechunk --max-layers 128 --chunkah | podman load
         run: |
           IMG=localhost/${{ env.IMAGE_NAME }}:${{ env.DEFAULT_TAG }}
-          export CHUNKAH_CONFIG_STR="$(podman inspect $IMG)"
-          podman run --rm \
-          --privileged \
-          --security-opt label=type:unconfined_t \
-          -v /var/lib/containers:/var/lib/containers \
-          --mount=type=image,src=$IMG,dest=/chunkah \
-          -e CHUNKAH_CONFIG_STR="$CHUNKAH_CONFIG_STR" \
-          quay.io/coreos/chunkah build \
-          -max-layers 120 \
-          --prune /sysroot/ \
-          -t localhost/${{ env.IMAGE_NAME }}:${{ env.DEFAULT_TAG }}-rechunked | podman load
-          podman tag localhost/${{ env.IMAGE_NAME }}:${{ env.DEFAULT_TAG }}-rechunked localhost/${{ env.IMAGE_NAME }}:${{ env.DEFAULT_TAG }}
+          podman run --rm --mount=type=image,src=$IMG,dest=/chunkah \
+          -e CHUNKAH_CONFIG_STR="$(podman inspect $IMG)" \
+          quay.io/fedora/fedora-bootc:44 \
+          /usr/libexec/bootc-base-imagectl rechunk --max-layers 128 --chunkah | podman load
+#        run: |
+#          IMG=localhost/${{ env.IMAGE_NAME }}:${{ env.DEFAULT_TAG }}
+#          export CHUNKAH_CONFIG_STR="$(podman inspect $IMG)"
+#          podman run --rm \
+#          --privileged \
+#          --security-opt label=type:unconfined_t \
+#          -v /var/lib/containers:/var/lib/containers \
+#          --mount=type=image,src=$IMG,dest=/chunkah \
+#          -e CHUNKAH_CONFIG_STR="$CHUNKAH_CONFIG_STR" \
+#          quay.io/coreos/chunkah build \
+#          -max-layers 120 \
+#          --prune /sysroot/ \
+#          -t localhost/${{ env.IMAGE_NAME }}:${{ env.DEFAULT_TAG }}-rechunked | podman load
+#          podman tag localhost/${{ env.IMAGE_NAME }}:${{ env.DEFAULT_TAG }}-rechunked localhost/${{ env.IMAGE_NAME }}:${{ env.DEFAULT_TAG }}
        
 
         # Only rechunk on the main branch as it takes a long time and don't push images from other branches anyway
