@@ -42,6 +42,22 @@ cp /ctx/custom/flatpaks/*.preinstall /etc/flatpak/preinstall.d/
 
 echo "::endgroup::"
 
+echo "::group:: Remove Packages"
+
+# Remove packages
+dnf5 remove -y \
+    firefox \
+    firefox-langpacks \
+    gnome-software \
+    gnome-extensions-app \
+    gnome-shell-extension-background-logo \
+    gnome-software-rpm-ostree \
+    gnome-terminal-nautilus \
+    yubikey-manager
+
+echo "::endgroup::"
+
+
 echo "::group:: Install Packages"
 
 # Install packages using dnf5 from fedora repos
@@ -86,12 +102,13 @@ copr_install_isolated "ublue-os/packages" uupd
 
 
 # Install tooling needed to develop bootc containers locally
-copr_install_isolated "gmaglione/podman-bootc" podman-bootc
 dnf5 -y install \
+    qemu-system-x86 \
     osbuild-selinux \
     podman-compose \
     podmansh \
     gvisor-tap-vsock
+copr_install_isolated "gmaglione/podman-bootc" podman-bootc
 
 echo "::endgroup::"
 
@@ -115,28 +132,15 @@ echo "::group:: Install Fonts"
 
 echo "::endgroup::"
 
-echo "::group:: Remove Packages"
-
-# Remove packages
-dnf5 remove -y \
-    firefox \
-    firefox-langpacks \
-    gnome-software \
-    gnome-extensions-app \
-    gnome-shell-extension-background-logo \
-    gnome-software-rpm-ostree \
-    gnome-terminal-nautilus \
-    yubikey-manager
-
-echo "::endgroup::"
-
 echo "::group:: System Configuration"
 
 # Install macadam it is needed by the podman-desktop-bootc extension, but is not packaged by fedora yet.
 # Ensure /var/usr/local exists (needed because /usr/local is a symlink to it)
 mkdir -p /var/usr/local/bin
-curl -L -o /var/usr/local/bin/macadam https://github.com/crc-org/macadam/releases/download/v0.2.0/macadam-linux-amd64
+curl -L -o /var/usr/local/bin/macadam https://github.com/crc-org/macadam/releases/download/v0.3.0/macadam-linux-amd64
 chmod +x /var/usr/local/bin/macadam
+# Clamp the timestamp to a fixed date to help chunkah and caching
+touch -d "2026-01-01" /var/usr/local/bin/macadam
 
 echo "::endgroup::"
 
