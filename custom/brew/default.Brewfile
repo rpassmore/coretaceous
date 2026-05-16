@@ -10,13 +10,13 @@ brew "fd"         # Simple, fast alternative to find
 brew "rg"         # ripgrep - faster grep
 
 # Development tools
-brew "gh"         # GitHub CLI
-brew "git"        # Git version control
+#brew "gh"         # GitHub CLI
+#brew "git"        # Git version control
 
 # Shell enhancements  
-brew "starship"   # Cross-shell prompt
-brew "zoxide"     # Smarter cd command
+#brew "starship"   # Cross-shell prompt
+#brew "zoxide"     # Smarter cd command
 
 # Utilities
-brew "htop"       # Interactive process viewer
-brew "tmux"       # Terminal multiplexer
+#brew "htop"       # Interactive process viewer
+#brew "tmux"       # Terminal multiplexer

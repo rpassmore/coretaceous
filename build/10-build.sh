@@ -29,6 +29,7 @@ echo "::endgroup::"
 echo "::group:: Copy Custom Files"
 
 # Copy Brewfiles to standard location
+cp -r /ctx/oci/brew/* /
 mkdir -p /usr/share/ublue-os/homebrew/
 cp /ctx/custom/brew/*.Brewfile /usr/share/ublue-os/homebrew/
 
@@ -52,16 +53,7 @@ dnf5 -y install \
     genisoimage \
     git-credential-libsecret \
     git \
-    gnome-shell-extension-dash-to-dock \
-    gnome-shell-extension-appindicator \
-    gnome-shell-extension-caffeine \
-    gnome-shell-extension-blur-my-shell \
-    gnome-backgrounds-extras \
-    gnome-tweaks \
-    google-droid-sans-mono-fonts \
-    google-go-mono-fonts \
     hplip \
-    ibm-plex-mono-fonts \
     iotop \
     lm_sensors \
     oddjob-mkhomedir \
@@ -69,8 +61,6 @@ dnf5 -y install \
     p7zip \
     p7zip-plugins \
     powertop \
-    powerline-fonts \
-    google-noto-fonts-all \
     restic \
     tiptop \
     switcheroo-control \
@@ -79,10 +69,21 @@ dnf5 -y install \
     wireguard-tools \
     zsh
 
+# Install Gnome Extensions
+dnf5 -y install \
+    gnome-shell-extension-dash-to-dock \
+    gnome-shell-extension-appindicator \
+    gnome-shell-extension-caffeine \
+    gnome-shell-extension-blur-my-shell \
+    gnome-backgrounds-extras \
+    gnome-tweaks
+
+find /usr/share/gnome-shell/extensions -exec \
+  setfattr -n user.component -v gnome-extensions {} +
+
 copr_install_isolated "atim/starship" starship
-copr_install_isolated "che/nerd-fonts" nerd-fonts
 copr_install_isolated "ublue-os/packages" uupd
-copr_install_isolated "atim/ubuntu-fonts" ubuntu-family-fonts
+
 
 # Install tooling needed to develop bootc containers locally
 copr_install_isolated "gmaglione/podman-bootc" podman-bootc
@@ -92,6 +93,29 @@ dnf5 -y install \
     podmansh \
     gvisor-tap-vsock
 
+echo "::endgroup::"
+
+echo "::group:: Install Fonts"
+
+# Install fonts
+#dnf5 -y install \
+#    google-droid-sans-mono-fonts \
+#    google-go-mono-fonts \
+#    powerline-fonts \
+#    ibm-plex-mono-fonts \
+#    google-noto-sans-mono-fonts \
+#    google-noto-sans-fonts \
+#    google-noto-serif-fonts
+#copr_install_isolated "che/nerd-fonts" nerd-fonts
+#copr_install_isolated "atim/ubuntu-fonts" ubuntu-family-fonts
+
+# Create a dedicated OCI component for fonts
+#find /usr/share/fonts -exec \
+#  setfattr -n user.component -v fonts {} +
+
+echo "::endgroup::"
+
+echo "::group:: Remove Packages"
 
 # Remove packages
 dnf5 remove -y \
@@ -104,18 +128,15 @@ dnf5 remove -y \
     gnome-terminal-nautilus \
     yubikey-manager
 
+echo "::endgroup::"
+
+echo "::group:: System Configuration"
+
 # Install macadam it is needed by the podman-desktop-bootc extension, but is not packaged by fedora yet.
 # Ensure /var/usr/local exists (needed because /usr/local is a symlink to it)
 mkdir -p /var/usr/local/bin
 curl -L -o /var/usr/local/bin/macadam https://github.com/crc-org/macadam/releases/download/v0.2.0/macadam-linux-amd64
 chmod +x /var/usr/local/bin/macadam
-
-# Install dynamic wallpapers
-curl -s "https://raw.githubusercontent.com/rpassmore/Linux_Dynamic_Wallpapers/main/Easy_Install.sh" | bash
-
-echo "::endgroup::"
-
-echo "::group:: System Configuration"
 
 echo "::endgroup::"
 
