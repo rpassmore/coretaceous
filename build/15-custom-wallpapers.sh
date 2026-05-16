@@ -9,4 +9,10 @@ shopt -s nullglob
 cp -r /ctx/oci/wallpapers/* /
 shopt -u nullglob
 
+# Create a dedicated OCI component for wallpapers
+find /usr/share/gnome-background-properties/ -exec \
+  setfattr -n user.component -v dynamic-wallpapers {} +
+find /usr/share/backgrounds/Dynamic_Wallpapers/ -exec \
+  setfattr -n user.component -v dynamic-wallpapers {} +
+
 echo "Adding custom wallpapers completed"
