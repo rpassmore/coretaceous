@@ -131,6 +131,7 @@ jobs:
 
           buildah bud \
             "${LABEL_ARGS[@]}" \
+            --timestamp 0 --omit-history \
             -t localhost/${{ env.IMAGE_NAME }}:${{ env.DEFAULT_TAG }} \
             -f ./Containerfile
 
