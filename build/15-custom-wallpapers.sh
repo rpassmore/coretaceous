@@ -6,7 +6,7 @@ echo "Adding custom wallpapers..."
 
 mkdir -p /usr/share/backgrounds /usr/share/gnome-background-properties
 shopt -s nullglob
-cp -r /ctx/oci/wallpapers/* /
+cp -af /ctx/oci/wallpapers/* /
 shopt -u nullglob
 
 # Create a dedicated OCI component for wallpapers
