@@ -18,4 +18,12 @@ find /ctx/custom/ujust -iname '*.just' -exec printf "\n\n" \; -exec cat {} \; >>
 mkdir -p /etc/flatpak/preinstall.d/
 cp -af /ctx/custom/flatpaks/*.preinstall /etc/flatpak/preinstall.d/
 
+# Label Homebrew assets as their own explicit component
+if [ -f /usr/share/homebrew.tar.zst ]; then
+  setfattr -n user.component -v homebrew /usr/share/homebrew.tar.zst
+fi
+if [ -d /usr/share/ublue-os/homebrew ]; then
+  find /usr/share/ublue-os/homebrew -exec setfattr -n user.component -v homebrew {} +
+fi
+
 echo "::endgroup::"
