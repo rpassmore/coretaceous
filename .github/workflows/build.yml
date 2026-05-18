@@ -144,7 +144,7 @@ jobs:
           podman run --rm --mount=type=image,src=$IMG,dest=/chunkah \
           -e CHUNKAH_CONFIG_STR="$(podman inspect $IMG)" \
           quay.io/fedora/fedora-bootc:44 \
-          /usr/libexec/bootc-base-imagectl rechunk --max-layers 128 --chunkah | podman load
+          /usr/libexec/bootc-base-imagectl rechunk --chunkah | podman load
 
 #          IMG=localhost/${{ env.IMAGE_NAME }}:${{ env.DEFAULT_TAG }}
 #          CHUNKAH_CONFIG_STR="$(podman inspect $IMG)"
