@@ -129,15 +129,14 @@ jobs:
             fi
           done <<< "$LABELS"
 
-          buildah bud \
+          podman build \
             "${LABEL_ARGS[@]}" \
             -t localhost/${{ env.IMAGE_NAME }}:${{ env.DEFAULT_TAG }} \
-            -f ./Containerfile
+            -f ./Containerfile .
 
       - name: Rechunk Image
-        # Use chunkah instead ...
         # Only rechunk on the main branch as it takes a long time and don't push images from other branches anyway
-        #if: github.event_name != 'pull_request' && github.ref == format('refs/heads/{0}', github.event.repository.default_branch)
+        if: github.event_name != 'pull_request' && github.ref == format('refs/heads/{0}', github.event.repository.default_branch)
         run: |
           IMG=localhost/${{ env.IMAGE_NAME }}:${{ env.DEFAULT_TAG }}
           
@@ -146,18 +145,9 @@ jobs:
             quay.io/fedora/fedora-bootc:44 \
             /usr/libexec/bootc-base-imagectl rechunk --max-layers 128 --chunkah | podman load)
           
-          echo "$LOAD_OUTPUT"
-          
           # Extract the SHA256 hash from the podman load confirmation text
           RECHUNK_ID=$(echo "$LOAD_OUTPUT" | grep -oE '[a-f0-9]{64}')
           podman tag $RECHUNK_ID localhost/${IMAGE_NAME}:rechunked
-
-          podman images --digests --no-trunc
-#          IMG=localhost/${{ env.IMAGE_NAME }}:${{ env.DEFAULT_TAG }}
-#          CHUNKAH_CONFIG_STR="$(podman inspect $IMG)"
-#          podman run --rm --mount=type=image,src=$IMG,dest=/chunkah \
-#          -e CHUNKAH_CONFIG_STR quay.io/coreos/chunkah build --max-layers 128 --prune /sysroot/ \
-#          -t localhost/${{ env.IMAGE_NAME }}:${{ env.DEFAULT_TAG }} | podman load
 
       # Tag for registry
       - name: Tag for registry
