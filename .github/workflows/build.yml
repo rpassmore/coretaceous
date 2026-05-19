@@ -131,7 +131,6 @@ jobs:
 
           buildah bud \
             "${LABEL_ARGS[@]}" \
-            --timestamp 0 \
             -t localhost/${{ env.IMAGE_NAME }}:${{ env.DEFAULT_TAG }} \
             -f ./Containerfile
 
@@ -152,6 +151,7 @@ jobs:
           podman tag $RECHUNK_ID localhost/${IMAGE_NAME}:rechunked
 
           podman inspect localhost/${{ env.IMAGE_NAME }}:rechunked --format '{{.Id}}'
+          podman images --digests --no-trunc
 #          IMG=localhost/${{ env.IMAGE_NAME }}:${{ env.DEFAULT_TAG }}
 #          CHUNKAH_CONFIG_STR="$(podman inspect $IMG)"
 #          podman run --rm --mount=type=image,src=$IMG,dest=/chunkah \
