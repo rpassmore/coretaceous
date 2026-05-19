@@ -146,9 +146,12 @@ jobs:
           podman run --rm --mount=type=image,src=$IMG,dest=/chunkah \
           -e CHUNKAH_CONFIG_STR="$(podman inspect $IMG)" \
           quay.io/fedora/fedora-bootc:44 \
-          /usr/libexec/bootc-base-imagectl rechunk --chunkah | podman load
+          /usr/libexec/bootc-base-imagectl rechunk --max-layers 128 --chunkah | podman load
+          podman images --digests --no-trunc
+          RECHUNK_ID=$(podman images --quiet | head -n1)
+          podman tag $RECHUNK_ID localhost/${IMAGE_NAME}:rechunked
 
-          podman inspect localhost/${{ env.IMAGE_NAME }}:${{ env.DEFAULT_TAG }} --format '{{.Id}}'
+          podman inspect localhost/${{ env.IMAGE_NAME }}:rechunked --format '{{.Id}}'
 #          IMG=localhost/${{ env.IMAGE_NAME }}:${{ env.DEFAULT_TAG }}
 #          CHUNKAH_CONFIG_STR="$(podman inspect $IMG)"
 #          podman run --rm --mount=type=image,src=$IMG,dest=/chunkah \
@@ -159,7 +162,7 @@ jobs:
       - name: Tag for registry
         run: |
           for tag in ${{ steps.metadata.outputs.tags }}; do
-            podman tag localhost/${{ env.IMAGE_NAME }}:${{ env.DEFAULT_TAG }} localhost/${{ env.IMAGE_NAME }}:$tag
+            podman tag localhost/${{ env.IMAGE_NAME }}:rechunked localhost/${{ env.IMAGE_NAME }}:$tag
           done
 
       # SBOM (OPTIONAL): Software Bill of Materials generation using Syft
