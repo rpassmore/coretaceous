@@ -129,37 +129,31 @@ jobs:
             fi
           done <<< "$LABELS"
 
-          buildah bud \
+          podman build \
             "${LABEL_ARGS[@]}" \
-            --timestamp 0 \
             -t localhost/${{ env.IMAGE_NAME }}:${{ env.DEFAULT_TAG }} \
-            -f ./Containerfile
+            -f ./Containerfile .
 
       - name: Rechunk Image
-        # Use chunkah instead ...
         # Only rechunk on the main branch as it takes a long time and don't push images from other branches anyway
         if: github.event_name != 'pull_request' && github.ref == format('refs/heads/{0}', github.event.repository.default_branch)
         run: |
-          podman inspect localhost/${{ env.IMAGE_NAME }}:${{ env.DEFAULT_TAG }} --format '{{.Id}}'
-          
           IMG=localhost/${{ env.IMAGE_NAME }}:${{ env.DEFAULT_TAG }}
-          podman run --rm --mount=type=image,src=$IMG,dest=/chunkah \
-          -e CHUNKAH_CONFIG_STR="$(podman inspect $IMG)" \
-          quay.io/fedora/fedora-bootc:44 \
-          /usr/libexec/bootc-base-imagectl rechunk --chunkah | podman load
-
-          podman inspect localhost/${{ env.IMAGE_NAME }}:${{ env.DEFAULT_TAG }} --format '{{.Id}}'
-#          IMG=localhost/${{ env.IMAGE_NAME }}:${{ env.DEFAULT_TAG }}
-#          CHUNKAH_CONFIG_STR="$(podman inspect $IMG)"
-#          podman run --rm --mount=type=image,src=$IMG,dest=/chunkah \
-#          -e CHUNKAH_CONFIG_STR quay.io/coreos/chunkah build --max-layers 128 --prune /sysroot/ \
-#          -t localhost/${{ env.IMAGE_NAME }}:${{ env.DEFAULT_TAG }} | podman load
+          
+          LOAD_OUTPUT=$(podman run --rm --mount=type=image,src=$IMG,dest=/chunkah \
+            -e CHUNKAH_CONFIG_STR="$(podman inspect $IMG)" \
+            quay.io/fedora/fedora-bootc:44 \
+            /usr/libexec/bootc-base-imagectl rechunk --max-layers 128 --chunkah | podman load)
+          
+          # Extract the SHA256 hash from the podman load confirmation text
+          RECHUNK_ID=$(echo "$LOAD_OUTPUT" | grep -oE '[a-f0-9]{64}')
+          podman tag $RECHUNK_ID localhost/${IMAGE_NAME}:rechunked
 
       # Tag for registry
       - name: Tag for registry
         run: |
           for tag in ${{ steps.metadata.outputs.tags }}; do
-            podman tag localhost/${{ env.IMAGE_NAME }}:${{ env.DEFAULT_TAG }} localhost/${{ env.IMAGE_NAME }}:$tag
+            podman tag localhost/${{ env.IMAGE_NAME }}:rechunked localhost/${{ env.IMAGE_NAME }}:$tag
           done
 
       # SBOM (OPTIONAL): Software Bill of Materials generation using Syft
