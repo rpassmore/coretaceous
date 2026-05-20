@@ -1,28 +1,41 @@
 #!/usr/bin/bash
 set -eoux pipefail
 
-echo "Cleaning up dnf caches..."
+echo "::group:: Advanced Cache Cleaning"
 
-# Remove any left over dnf caches
+# 1. Clear out package manager trash and transient font caches
 dnf5 clean all
 rm -rf /var/cache/fontconfig/*
 rm -rf /var/cache/dnf /var/cache/libdnf5
 
-# Vacuum the database if sqlite3 is present to reduce size changes, then clamp
-if [ -f /usr/share/rpm/rpmdb.sqlite ]; then
-  if command -v sqlite3 &> /dev/null; then
-    sqlite3 /usr/share/rpm/rpmdb.sqlite "VACUUM;"
-  fi
-  touch -d "2026-01-01 00:00:00" /usr/share/rpm/rpmdb.sqlite
-fi
-
-echo "Dnf caches cleaning completed"
-
-echo "::group:: Clamping SELinux Policy Timestamps"
-
-# 1. Clamp file timestamps inside the SELinux policy directory tree
-if [ -d /etc/selinux/targeted ]; then
-  find /etc/selinux/targeted -exec touch -h -d "2026-01-01 00:00:00" {} +
+# 2. PURGE OR CLAMP MIN GW CROSS-LOCALES (Saves ~40-50MB of drift)
+# If these packages are present, freeze their localization directories 
+# so chunkah sees zero delta day-to-day.
+if [ -d /usr/x86_64-w64-mingw32 ]; then
+  find /usr/x86_64-w64-mingw32 -type d -exec touch -h -d "2026-01-01 00:00:00" {} +
 fi
 
 echo "::endgroup::"
+
+
+echo "::group:: Freezing System Configuration Timestamps"
+
+# 3. Freeze Core RPM DB
+if [ -f /usr/share/rpm/rpmdb.sqlite ]; then
+  touch -d "2026-01-01 00:00:00" /usr/share/rpm/rpmdb.sqlite
+fi
+
+# 4. Freeze SELinux Entirely
+if [ -d /etc/selinux ]; then
+  find /etc/selinux -exec touch -h -d "2026-01-01 00:00:00" {} +
+fi
+
+# 5. Freeze GDM, Firewalld, and general /etc configuration drift
+# This forces the metadata hashes under /etc to perfectly align across builds
+find /etc/gdm /etc/firewalld /etc/grub.d -exec touch -h -d "2026-01-01 00:00:00" {} + 2>/dev/null || true
+
+# 6. Catch any lingering root locale directories touched during package transactions
+find /usr/share/locale -type d -exec touch -h -d "2026-01-01 00:00:00" {} +
+
+echo "::endgroup::"
+echo "Image stabilization completed successfully!"
