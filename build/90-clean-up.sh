@@ -17,3 +17,12 @@ if [ -f /usr/share/rpm/rpmdb.sqlite ]; then
 fi
 
 echo "Dnf caches cleaning completed"
+
+echo "::group:: Clamping SELinux Policy Timestamps"
+
+# 1. Clamp file timestamps inside the SELinux policy directory tree
+if [ -d /etc/selinux/targeted ]; then
+  find /etc/selinux/targeted -exec touch -h -d "2026-01-01 00:00:00" {} +
+fi
+
+echo "::endgroup::"
