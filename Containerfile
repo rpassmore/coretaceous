@@ -78,6 +78,11 @@ RUN --mount=type=bind,from=ctx,source=/,target=/ctx \
     --mount=type=tmpfs,dst=/tmp \
     /ctx/build/run-scripts.sh
 
+# Register systemd tmpfiles initialization directive for macadam and libvirt
+RUN echo "d /var/usr/local/bin 0755 root root -" > /usr/lib/tmpfiles.d/macadam-dirs.conf
+RUN echo "d /var/lib/libvirt 0755 root root -" > /usr/lib/tmpfiles.d/libvirt-dirs.conf \
+ && echo "d /var/lib/swtpm-localca 0750 root root -" >> /usr/lib/tmpfiles.d/libvirt-dirs.conf
+
 ### LINTING
 ## Verify final image and contents are correct.
 RUN bootc container lint
