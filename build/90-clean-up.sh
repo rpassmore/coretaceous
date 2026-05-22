@@ -24,6 +24,8 @@ rm -rf /var/lib/dnf
 rm -rf /var/lib/iscsi
 # clear up libvirt files, they will be recreated at runtime by the systemd tmpfiles.d
 rm -rf /var/lib/libvirt
+rm -rf /var/lib/rpm-state
+rm -rf /var/lib/swtpm-localca
 
 # Fix 'nonempty-run-tmp': Erase dynamic state indicators captured in /run and /tmp
 # These are generated at build time by system calls and security engines
