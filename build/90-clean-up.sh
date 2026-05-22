@@ -22,6 +22,8 @@ echo "::group:: Runtime purge "
 # Fix 'var-tmpfiles': Wipe all persistent tracking states written by dnf/rpm
 rm -rf /var/lib/dnf
 rm -rf /var/lib/iscsi
+# clear up libvirt files, they will be recreated at runtime by the systemd tmpfiles.d
+rm -rf /var/lib/libvirt
 
 # Fix 'nonempty-run-tmp': Erase dynamic state indicators captured in /run and /tmp
 # These are generated at build time by system calls and security engines
