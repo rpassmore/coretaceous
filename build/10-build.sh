@@ -120,11 +120,12 @@ echo "::group:: System Configuration"
 
 # Install macadam it is needed by the podman-desktop-bootc extension, but is not packaged by fedora yet.
 # Ensure /var/usr/local exists (needed because /usr/local is a symlink to it)
-mkdir -p /var/usr/local/bin
-curl -L -o /var/usr/local/bin/macadam https://github.com/crc-org/macadam/releases/download/v0.3.0/macadam-linux-amd64
-chmod +x /var/usr/local/bin/macadam
+mkdir -p /usr/bin
+curl -L -o /usr/bin/macadam https://github.com/crc-org/macadam/releases/download/v0.3.0/macadam-linux-amd64
+chmod +x /usr/bin/macadam
+
 # Clamp the timestamp to a fixed date to help chunkah and caching
-touch -d "2026-01-01" /var/usr/local/bin/macadam
+touch -d "2026-01-01" /usr/bin/macadam
 
 echo "::endgroup::"
 
