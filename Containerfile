@@ -48,7 +48,7 @@ COPY --from=ghcr.io/ublue-os/brew:latest@sha256:931f0f067bf46c078b919d7b69b7d540
 COPY --from=ghcr.io/rpassmore/linux-dynamic-wallpapers:latest@sha256:f368b1b3c7ffa3303719b13cf2442527f7219591de3add0ba3e901d6b0bbf3a1 /system_files /oci/wallpapers
 
 # Base Image - GNOME included
-FROM ghcr.io/ublue-os/silverblue-nvidia:43@sha256:6fce310680e47c8a5ca9917498f23b74375d56ff240b2c879d76e7bf949d7012
+FROM ghcr.io/ublue-os/silverblue-nvidia:43@sha256:56bd222f91b12aa375005c91fb0fa22f52ab172700400c50051f02d9bb2338dc
 
 ### /opt
 ## Some bootable images, like Fedora, have /opt symlinked to /var/opt, in order to
