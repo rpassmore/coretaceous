@@ -43,7 +43,7 @@ COPY custom /custom
 # Note: Renovate can automatically update these :latest tags to SHA-256 digests for reproducibility
 COPY --from=ghcr.io/projectbluefin/common:latest@sha256:319911db06d6367b70c2c3478801794010d28c9010911a34402531f79371eca9 /system_files/shared /oci/common/shared
 COPY --from=ghcr.io/projectbluefin/common:latest@sha256:319911db06d6367b70c2c3478801794010d28c9010911a34402531f79371eca9 /system_files/bluefin/usr/share/ublue-os/just /oci/common/bluefin/usr/share/ublue-os/just
-COPY --from=ghcr.io/ublue-os/brew:latest@sha256:07799dfe9ed44812a63d1b23c74e3e30b758a976f647032d916c34daf30f60a4 /system_files /oci/brew
+COPY --from=ghcr.io/ublue-os/brew:latest@sha256:8855464e5c150974c5edf4343ffef50ca37b1c4d96a648dce28927033010a372 /system_files /oci/brew
 
 COPY --from=ghcr.io/rpassmore/linux-dynamic-wallpapers:latest@sha256:f368b1b3c7ffa3303719b13cf2442527f7219591de3add0ba3e901d6b0bbf3a1 /system_files /oci/wallpapers
 
