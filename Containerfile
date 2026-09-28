@@ -44,7 +44,7 @@ COPY custom /custom
 COPY --from=ghcr.io/projectbluefin/common:latest@sha256:57b4cada5f4dba3d61c01837f8ffae067bdba3d2968226abaecef5c6e88d8356 /system_files/shared /oci/common/shared
 COPY --from=ghcr.io/projectbluefin/common:latest@sha256:57b4cada5f4dba3d61c01837f8ffae067bdba3d2968226abaecef5c6e88d8356 /system_files/bluefin/usr/share/ublue-os/just /oci/common/bluefin/usr/share/ublue-os/just
 
-COPY --from=ghcr.io/ublue-os/brew:latest@sha256:e9a72571b7644b6277f0638b6a3c5e497e265e1098ab91224567acbdeb8b74ea /system_files /oci/brew
+COPY --from=ghcr.io/ublue-os/brew:latest@sha256:bc6f5a9fc4f28cded2fe567b31f74825c1f4481d5e43c537c3fcc0d3df6d22ab /system_files /oci/brew
 
 COPY --from=ghcr.io/rpassmore/linux-dynamic-wallpapers:latest@sha256:f368b1b3c7ffa3303719b13cf2442527f7219591de3add0ba3e901d6b0bbf3a1 /system_files /oci/wallpapers
 
