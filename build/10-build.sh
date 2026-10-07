@@ -53,6 +53,8 @@ dnf5 -y install \
     genisoimage \
     git-credential-libsecret \
     git \
+    gnome-backgrounds-extras \
+    gnome-tweaks \
     hplip \
     iotop \
     lm_sensors \
@@ -68,15 +70,6 @@ dnf5 -y install \
     waypipe \
     wireguard-tools \
     zsh
-
-# Install Gnome Extensions
-dnf5 -y install \
-    gnome-shell-extension-dash-to-dock \
-    gnome-shell-extension-appindicator \
-    gnome-shell-extension-caffeine \
-    gnome-shell-extension-blur-my-shell \
-    gnome-backgrounds-extras \
-    gnome-tweaks
 
 find /usr/share/gnome-shell/extensions -exec \
   setfattr -n user.component -v gnome-extensions {} +
