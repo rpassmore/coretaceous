@@ -112,6 +112,10 @@ done
 	echo "enabled-extensions=[${ENABLED_LIST}]"
 } >"${OVERRIDE_FILE}"
 
+# Force directories to be readable/executable and files to be readable by all users
+find "${EXTENSIONS_DIR}" -type d -exec chmod 755 {} +
+find "${EXTENSIONS_DIR}" -type f -exec chmod 644 {} +
+
 # Rebuild the system schema cache so the override takes effect.
 rm -f /usr/share/glib-2.0/schemas/gschemas.compiled
 glib-compile-schemas /usr/share/glib-2.0/schemas
